@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="com.plumcot.srv.SupplierService" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.Links">
+                <Collection>
+                    <Record>
+                        <PropertyValue Property="rel" String="author"/>
+                        <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+                    </Record>
+                </Collection>
+            </Annotation>
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="BusinessPartnerSet" EntityType="com.plumcot.srv.SupplierService.BusinessPartnerSet"/>
+                <EntitySet Name="Company" EntityType="com.plumcot.srv.SupplierService.Company"/>
+                <EntitySet Name="Contact" EntityType="com.plumcot.srv.SupplierService.Contact"/>
+                <EntitySet Name="Categories" EntityType="com.plumcot.srv.SupplierService.Categories"/>
+                <AssociationSet Name="Company_BP" Association="com.plumcot.srv.SupplierService.Company_BP">
+                    <End Role="Company" EntitySet="Company"/>
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                </AssociationSet>
+                <AssociationSet Name="Contact_BP" Association="com.plumcot.srv.SupplierService.Contact_BP">
+                    <End Role="Contact" EntitySet="Contact"/>
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                </AssociationSet>
+                <AssociationSet Name="Categories_BP" Association="com.plumcot.srv.SupplierService.Categories_BP">
+                    <End Role="Categories" EntitySet="Categories"/>
+                    <End Role="BusinessPartnerSet" EntitySet="BusinessPartnerSet"/>
+                </AssociationSet>
+            </EntityContainer>
+            <EntityType Name="BusinessPartnerSet">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" MaxLength="16" Nullable="false"/>
+                <Property Name="Password" Type="Edm.String" MaxLength="16"/>
+                <NavigationProperty Name="Company" Relationship="com.plumcot.srv.SupplierService.Company_BP" FromRole="BusinessPartnerSet" ToRole="Company"/>
+                <NavigationProperty Name="ContactDetails" Relationship="com.plumcot.srv.SupplierService.Contact_BP" FromRole="BusinessPartnerSet" ToRole="Contact"/>
+                <NavigationProperty Name="Categories" Relationship="com.plumcot.srv.SupplierService.Categories_BP" FromRole="BusinessPartnerSet" ToRole="Categories"/>
+            </EntityType>
+            <EntityType Name="Company">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" MaxLength="16" Nullable="false"/>
+                <Property Name="CompanyName" Type="Edm.String" MaxLength="44"/>
+                <Property Name="Address1" Type="Edm.String" MaxLength="256"/>
+                <Property Name="Address2" Type="Edm.String" MaxLength="256"/>
+                <Property Name="Country" Type="Edm.String" MaxLength="32"/>
+                <Property Name="State" Type="Edm.String" MaxLength="32"/>
+                <Property Name="City" Type="Edm.String" MaxLength="32"/>
+                <Property Name="POBox" Type="Edm.String" MaxLength="8"/>
+                <NavigationProperty Name="BP" Relationship="com.plumcot.srv.SupplierService.Company_BP" FromRole="Company" ToRole="BusinessPartnerSet"/>
+                <Property Name="BP_UserID" Type="Edm.String" MaxLength="16"/>
+            </EntityType>
+            <EntityType Name="Contact">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" MaxLength="16" Nullable="false"/>
+                <Property Name="FirstName" Type="Edm.String" MaxLength="32"/>
+                <Property Name="MiddleName" Type="Edm.String" MaxLength="32"/>
+                <Property Name="LastName" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Email" Type="Edm.String" MaxLength="56"/>
+                <Property Name="CountryCode" Type="Edm.String" MaxLength="10"/>
+                <Property Name="MobileNumber" Type="Edm.String" MaxLength="12"/>
+                <Property Name="WorkNumber" Type="Edm.String" MaxLength="12"/>
+                <Property Name="DefaultFlag" Type="Edm.String" MaxLength="1"/>
+                <NavigationProperty Name="BP" Relationship="com.plumcot.srv.SupplierService.Contact_BP" FromRole="Contact" ToRole="BusinessPartnerSet"/>
+                <Property Name="BP_UserID" Type="Edm.String" MaxLength="16"/>
+            </EntityType>
+            <EntityType Name="Categories">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" MaxLength="16" Nullable="false"/>
+                <Property Name="Category1" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Category2" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Category3" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Category4" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Category5" Type="Edm.String" MaxLength="32"/>
+                <Property Name="Category6" Type="Edm.String" MaxLength="32"/>
+                <NavigationProperty Name="BP" Relationship="com.plumcot.srv.SupplierService.Categories_BP" FromRole="Categories" ToRole="BusinessPartnerSet"/>
+                <Property Name="BP_UserID" Type="Edm.String" MaxLength="16"/>
+            </EntityType>
+            <Association Name="Company_BP">
+                <End Role="Company" Type="com.plumcot.srv.SupplierService.Company" Multiplicity="0..1"/>
+                <End Role="BusinessPartnerSet" Type="com.plumcot.srv.SupplierService.BusinessPartnerSet" Multiplicity="0..1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <ReferentialConstraint>
+                    <Principal Role="BusinessPartnerSet">
+                        <PropertyRef Name="UserID"/>
+                    </Principal>
+                    <Dependent Role="Company">
+                        <PropertyRef Name="BP_UserID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Contact_BP">
+                <End Role="Contact" Type="com.plumcot.srv.SupplierService.Contact" Multiplicity="*"/>
+                <End Role="BusinessPartnerSet" Type="com.plumcot.srv.SupplierService.BusinessPartnerSet" Multiplicity="0..1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <ReferentialConstraint>
+                    <Principal Role="BusinessPartnerSet">
+                        <PropertyRef Name="UserID"/>
+                    </Principal>
+                    <Dependent Role="Contact">
+                        <PropertyRef Name="BP_UserID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Categories_BP">
+                <End Role="Categories" Type="com.plumcot.srv.SupplierService.Categories" Multiplicity="0..1"/>
+                <End Role="BusinessPartnerSet" Type="com.plumcot.srv.SupplierService.BusinessPartnerSet" Multiplicity="0..1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <ReferentialConstraint>
+                    <Principal Role="BusinessPartnerSet">
+                        <PropertyRef Name="UserID"/>
+                    </Principal>
+                    <Dependent Role="Categories">
+                        <PropertyRef Name="BP_UserID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

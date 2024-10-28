@@ -1,0 +1,440 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:m="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+    <NavContainer id="wizardNavContainer" height="100%" width="100%" class="sapUiSizeCompact">
+        <pages>
+            <Page id="wizardContentPage" showHeader="false" enableScrolling="true">
+                <content>
+                    <Toolbar class="toolBarClass" height="4.5rem" width="100%">
+                        <Avatar src="{img>/logo}" displaySize="M" showBorder="true" class="sapUiMediumMarginBegin" imageFitType="Contain"/>
+                        <ToolbarSpacer/>
+                        <core:HTML id="headerHTML" class="sapUiLargeMarginTop" content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: large;font-family: system-ui;&quot;&gt;New Supplier Registration&lt;/h1&gt;'></core:HTML>
+                        <ToolbarSpacer width="43%"/>
+                    </Toolbar>
+                    <VBox justifyContent="Start" fitContainer="true" width="99%" height="auto" alignContent="Stretch" alignItems="Stretch" class="rPageBox sapUiTinyMarginEnd sapUiTinyMarginBegin sapUiTinyMarginTop sapUiTinyMarginBottom">
+                        <Wizard id="supplierWizard" class="sapUiSizeCompact wizardClass" showNextButton="true" stepTitleLevel="H4" complete="wizardCompletedHandler" renderMode="Scroll">
+                            <!-- 1st Step -->
+                            <WizardStep id="suppInfo" title="Company Details" validated="{=${validatedModel>/validated}==='Pending'? true:false}" activate="activateNextStep" class="childVBox">
+                                <VBox height="100%" justifyContent="Center" backgroundDesign="Solid">
+                                    <f:SimpleForm id="idForm4" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="2" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding sapUiNoMarginBottom">
+                                        <f:content>
+                                            <Label text="Company Name" design="Bold" class="label"></Label>
+                                            <Input value="{oCompanyModel>Company}" liveChange="activateNextStep" maxLength="32" required="true" fieldGroupIds="compInfoForm">
+                                            </Input>
+
+                                            <Label text="Address Line 1" design="Bold" class="label"></Label>
+                                            <Input value="{oCompanyModel>Address1}" liveChange="activateNextStep" maxLength="256" required="true" fieldGroupIds="compInfoForm"></Input>
+
+                                            <Label text="Address Line 2" design="Bold" class="label"></Label>
+                                            <Input value="{oCompanyModel>Address2}" liveChange="activateNextStep" maxLength="256" required="true" fieldGroupIds="compInfoForm"></Input>
+
+                                            <Label text="Country" design="Bold" class="label"></Label>
+                                            <ComboBox required="true" value="{oCompanyModel>Country}" items="{path: 'countriesModel>/',sorter: { path: 'name' }}" fieldGroupIds="compInfoForm">
+                                                <core:Item key="{countriesModel>code}" text="{countriesModel>name}" />
+                                                <layoutData>
+                                                    <l:GridData span="XL2 L3 M3 S3" />
+                                                </layoutData>
+                                            </ComboBox>
+
+                                            <Title text="State:" textAlign="End" class="formTitle sapUiTinyMarginEnd sapUiTinyMarginTop">
+                                                <layoutData>
+                                                    <l:GridData span="XL1 L3 M1 S3" />
+                                                </layoutData>
+                                            </Title>
+                                            <ComboBox value="{oCompanyModel>State}" fieldGroupIds="compInfoForm">
+                                                <core:Item key="" text="" />
+                                                <layoutData>
+                                                    <l:GridData span="XL2 L3 M3 S3" />
+                                                </layoutData>
+                                            </ComboBox>
+
+                                            <Label text="P.O.Box/ZipCode" design="Bold" class="label"></Label>
+                                            <ComboBox value="{oCompanyModel>ZipCode}" fieldGroupIds="compInfoForm">
+                                                <core:Item key="" text="" />
+                                                <layoutData>
+                                                    <l:GridData span="XL2 L3 M3 S3" />
+                                                </layoutData>
+                                            </ComboBox>
+
+                                            <Title text="City:" textAlign="End" class="formTitle sapUiTinyMarginEnd sapUiTinyMarginTop">
+                                                <layoutData>
+                                                    <l:GridData span="XL1 L3 M1 S3" />
+                                                </layoutData>
+                                            </Title>
+                                            <Input value="{oCompanyModel>City}" maxLength="32" liveChange="activateNextStep" fieldGroupIds="compInfoForm">
+                                                <layoutData>
+                                                    <l:GridData span="XL2 L3 M3 S3" />
+                                                </layoutData>
+                                            </Input>
+                                        </f:content>
+                                    </f:SimpleForm>
+                                </VBox>
+                            </WizardStep>
+                            <!-- 2nd step -->
+                            <WizardStep id="bussInfo" validated="{=${validatedModel>/validated}==='Pending'? true:false}" title="Contact Person" activate="activateNextStep" class="childVBox">
+                                <VBox height="100%" justifyContent="Center">
+                                    <OverflowToolbar id="oContactHeaderBar">
+                                        <core:HTML content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: medium;font-family: system-ui;&quot;&gt;Contact Details&lt;/h1&gt;'></core:HTML>
+                                        <ToolbarSpacer />
+                                        <Button id="addBtn" text="Add" icon="sap-icon://add-employee" type="Success" press="onAddContact" />
+                                        <Button id="dltBtn" text="Delete" icon="sap-icon://delete" type="Negative" press="onDeleteContact" />
+                                    </OverflowToolbar>
+                                    <ScrollContainer height="100%" vertical="true" horizontal="true">
+                                        <Table id="idContactTable" alternateRowColors="true" selectionChange="_onDefaultSelected" items="{oContactModel>/}" growing="true" mode="SingleSelectLeft" growingThreshold="10" class="sapUiSizeCompact" sticky="ColumnHeaders,HeaderToolbar">
+                                            <columns>
+                                                <!-- <Column hAlign="Begin" width="4rem">
+                                                        <Text text="Default" />
+                                                    </Column> -->
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="First Name" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="Middle Name" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="Last Name" />
+                                                </Column>
+                                                <Column hAlign="Center" width="13rem">
+                                                    <Text text="Email" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="Country Code" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="Mobile No." />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Text text="Work No." />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem vAlign="Middle">
+                                                    <cells>
+                                                        <!-- <RadioButton selected="{oContactModel>IsDefault}" select="onDefaultSelect" fieldGroupIds="contactItem"/> -->
+                                                        <Input value="{oContactModel>firstName}" maxLength="32" fieldGroupIds="contactItem" submit="activateNextStep" change="activateNextStep"/>
+                                                        <Input value="{oContactModel>middleName}" maxLength="32"/>
+                                                        <Input value="{oContactModel>lastName}" maxLength="32" fieldGroupIds="contactItem" submit="activateNextStep" change="activateNextStep"/>
+                                                        <Input value="{oContactModel>Email}" maxLength="44" fieldGroupIds="contactItem" submit="activateNextStep" change="activateNextStep"/>
+                                                        <Input value="{oContactModel>countryCode}" maxLength="4" fieldGroupIds="contactItem" submit="activateNextStep"/>
+                                                        <Input value="{oContactModel>Phone}" maxLength="11" fieldGroupIds="contactItem" submit="activateNextStep" change="activateNextStep"/>
+                                                        <Input value="{oContactModel>wPhone}" maxLength="11" change="activateNextStep" submit="activateNextStep" liveChange="activateNextStep" />
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </ScrollContainer>
+                                </VBox>
+                            </WizardStep>
+                            <!-- 3rd step -->
+                            <WizardStep id="iDprodCat" validated="{=${validatedModel>/validated}==='Pending'? true:false}" title="Product Categories" activate="activateNextStep" class="childVBox">
+                                <VBox >
+                                    <Toolbar id="TB1">
+                                        <core:HTML content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: medium;font-family: system-ui;&quot;&gt;Select Categories that you supply Materials/Services In &lt;/h1&gt;'></core:HTML>
+                                        <ToolbarSpacer />
+                                    </Toolbar>
+                                    <HBox fitContainer="true" justifyContent="Center" alignContent="Center" alignItems="Center" backgroundDesign="Solid">
+                                        <VBox width="40%" justifyContent="Start" alignContent="Stretch" alignItems="Stretch" backgroundDesign="Solid">
+                                            <f:SimpleForm id="idFormCat" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+
+                                                <f:content>
+                                                    <Label text="Category 1" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category1}" change="activateNextStep" fieldGroupIds="catForm"/>
+
+                                                    <Label text="Category 2" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category2}" change="activateNextStep" fieldGroupIds="catForm"/>
+
+                                                    <Label text="Category 3" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category3}" change="activateNextStep" fieldGroupIds="catForm"/>
+
+                                                </f:content>
+                                            </f:SimpleForm>
+                                        </VBox>
+                                        <VBox width="40%" justifyContent="Start" alignContent="Stretch" alignItems="Stretch" backgroundDesign="Solid">
+                                            <f:SimpleForm id="idFormCat2" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="6" labelSpanM="5" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+                                                <f:content>
+                                                    <Label text="Category 4" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category4}" change="activateNextStep" fieldGroupIds="catForm"/>
+
+                                                    <Label text="Category 5" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category5}" change="activateNextStep" fieldGroupIds="catForm"/>
+
+                                                    <Label text="Category 6" design="Bold" class="label"></Label>
+                                                    <ComboBox value="{oCategoryModel>Category6}" change="activateNextStep" fieldGroupIds="catForm"/>
+                                                </f:content>
+                                            </f:SimpleForm>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                            </WizardStep>
+                            <!-- step 4 -->
+                            <WizardStep id="docUpload" validated="{=${validatedModel>/validated}==='Pending'? true:false}" title="Documents" activate="activateNextStep" class="childVBox">
+                                <VBox justifyContent="Center" backgroundDesign="Solid">
+                                    <Toolbar id="TB2">
+                                        <core:HTML content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: medium;font-family: system-ui;&quot;&gt;Upload Documents&lt;/h1&gt;'></core:HTML>
+                                        <ToolbarSpacer />
+                                    </Toolbar>
+                                    <f:SimpleForm id="idDocForm" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+                                        <f:content>
+                                            <Label text="Trade License" design="Bold" class="label"/>
+                                            <HBox>
+                                                <u:FileUploader id="tradeDoc" icon="sap-icon://add-document" width="25rem" fileType="pdf,doc,docx" fieldGroupIds="doctForm" value="{oDocumentModel>TradeDoc}" iconOnly="true" placeholder="Trade License" name="myFileUpload" tooltip="Browse" useMultipart="false" mimeType="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" uploadComplete="handleUploadComplete" change="handleValueChange" typeMissmatch="handleTypeMissmatch"/>
+                                                <Button id="TradeEditDownload" icon="sap-icon://download" type="Emphasized" visible="{=${validatedModel>/validated}==='Pending'? true:false}"/>
+                                            </HBox>
+
+                                            <Label text="VAT Certificate" design="Bold" class="label"/>
+                                            <HBox>
+                                                <u:FileUploader id="vatDoc" icon="sap-icon://add-document" fileType="pdf,doc,docx" width="25rem" fieldGroupIds="doctForm" value="{oDocumentModel>VatDoc}" iconOnly="true" tooltip="Browse" placeholder="VAT Certificate" name="myFileUpload" useMultipart="false" change="handleValueChange" mimeType="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                                                <Button id="VatEditDownload" icon="sap-icon://download" type="Emphasized" visible="{=${validatedModel>/validated}==='Pending'? true:false}"/>
+                                            </HBox>
+
+                                            <Label text="Emirates ID" design="Bold" class="label"/>
+                                            <HBox>
+                                                <u:FileUploader id="emiratesDoc" icon="sap-icon://add-document" fileType="pdf,doc,docx" width="25rem" fieldGroupIds="doctForm" value="{oDocumentModel>EmiratesId}" iconOnly="true" tooltip="Browse" placeholder="Emirates ID" name="myFileUpload" useMultipart="false" change="handleValueChange" mimeType="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                                                <Button id="EmiEditDownload" icon="sap-icon://download" type="Emphasized" visible="{=${validatedModel>/validated}==='Pending'? true:false}"/>
+                                            </HBox>
+
+                                            <Label text="Corporate Tax Certificate" design="Bold" class="label"/>
+                                            <HBox>
+                                                <u:FileUploader id="taxDoc" icon="sap-icon://add-document" fileType="pdf,doc,docx" width="25rem" fieldGroupIds="doctForm" value="{oDocumentModel>CorporateTax}" iconOnly="true" tooltip="Browse" placeholder="Tax Certificate" name="myFileUpload" useMultipart="false" change="handleValueChange" mimeType="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                                                <Button id="TaxEditDownload" icon="sap-icon://download" type="Emphasized" visible="{=${validatedModel>/validated}==='Pending'? true:false}"/>
+                                            </HBox>
+                                        </f:content>
+                                    </f:SimpleForm>
+                                </VBox>
+                            </WizardStep>
+                        </Wizard>
+                    </VBox>
+                </content>
+                <footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer/>
+                        <Button text="Cancel" type="Reject" icon="sap-icon://reset" press="handleWizardCancel"/>
+                    </OverflowToolbar>
+                </footer>
+            </Page>
+            <!-- Review Page -->
+            <Page id="wizardReviewPage" showHeader="false" enableScrolling="false">
+                <content>
+                    <Toolbar class="toolBarClass" height="4.5rem" width="100%">
+                        <Avatar src="{img>/logo}" displaySize="M" showBorder="true" class="sapUiLargeMarginBegin" imageFitType="Contain"/>
+                        <ToolbarSpacer/>
+                        <core:HTML class="sapUiLargeMarginTop" content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: large;font-family: system-ui;&quot;&gt;New Supplier Registration&lt;/h1&gt;'></core:HTML>
+                        <ToolbarSpacer width="43%"/>
+                    </Toolbar>
+                    <uxap:ObjectPageLayout id="ObjectPageLayout" height="100%" upperCaseAnchorBar="false" class="uxapClass">
+                        <uxap:sections>
+                            <uxap:ObjectPageSection titleUppercase="false" id="section1" title="Company Details" class="uxapClass">
+                                <uxap:subSections>
+                                    <uxap:ObjectPageSubSection titleUppercase="false" title="">
+                                        <VBox justifyContent="Center" backgroundDesign="Solid" class="childVBox">
+                                            <f:SimpleForm id="idForm4Review" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="2" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding sapUiNoMarginBottom">
+
+                                                <f:content>
+                                                    <Label text="Company Name" class="label"></Label>
+                                                    <Text text="{oCompanyModel>Company}">
+                                                    </Text>
+
+                                                    <Label text="Country" class="label"></Label>
+                                                    <Text text="{oCompanyModel>Country}">
+                                                    </Text>
+
+                                                    <Title text="State:" textAlign="End" class="formTitleR sapUiTinyMarginEnd sapUiTinyMarginTop">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S3" />
+                                                        </layoutData>
+                                                    </Title>
+                                                    <Text text="{oCompanyModel>State}">
+                                                    </Text>
+
+                                                    <Label text="P.O.Box/ZipCode" class="label"></Label>
+                                                    <Text text="{oCompanyModel>ZipCode}">
+                                                    </Text>
+
+                                                    <Title text="City:" textAlign="End" class="formTitleR sapUiTinyMarginEnd sapUiTinyMarginTop">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S3" />
+                                                        </layoutData>
+                                                    </Title>
+                                                    <Text text="{oCompanyModel>City}">
+                                                    </Text>
+
+                                                    <Label text="Address Line 1" class="label"></Label>
+                                                    <Text text="{oCompanyModel>Address1}"></Text>
+
+                                                    <Label text="Address Line 2" class="label"></Label>
+                                                    <Text text="{oCompanyModel>Address2}"></Text>
+                                                </f:content>
+                                            </f:SimpleForm>
+                                        </VBox>
+                                    </uxap:ObjectPageSubSection>
+                                </uxap:subSections>
+                            </uxap:ObjectPageSection>
+                            <uxap:ObjectPageSection titleUppercase="false" id="section2" title="Product Categories" class="uxapClass">
+                                <uxap:subSections>
+                                    <uxap:ObjectPageSubSection titleUppercase="false" title="">
+                                        <HBox fitContainer="true" justifyContent="Center" alignContent="Center" alignItems="Center" class="childVBox" backgroundDesign="Solid">
+                                            <VBox justifyContent="Center" backgroundDesign="Solid" width="50%">
+                                                <f:SimpleForm id="idFormCatR" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="6" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+                                                    <f:content>
+                                                        <Label text="Category 1" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category1}"/>
+
+                                                        <Label text="Category 2" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category2}"/>
+
+                                                        <Label text="Category 3" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category3}"/>
+                                                    </f:content>
+                                                </f:SimpleForm>
+                                            </VBox>
+                                            <VBox justifyContent="Center" backgroundDesign="Solid" width="50%">
+                                                <f:SimpleForm id="idFormCat2R" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="3" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+                                                    <f:content>
+                                                        <Label text="Category 4" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category4}"/>
+
+                                                        <Label text="Category 5" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category5}"/>
+
+                                                        <Label text="Category 6" class="label"></Label>
+                                                        <Text text="{oCategoryModel>Category6}"/>
+                                                    </f:content>
+                                                </f:SimpleForm>
+                                            </VBox>
+                                        </HBox>
+                                    </uxap:ObjectPageSubSection>
+                                </uxap:subSections>
+                            </uxap:ObjectPageSection>
+                            <uxap:ObjectPageSection titleUppercase="false" id="section3" title="Contact Person">
+                                <uxap:subSections>
+                                    <uxap:ObjectPageSubSection id="section3_SS1" title="" titleUppercase="false">
+                                        <VBox justifyContent="Center" class="childVBox">
+                                            <ScrollContainer height="100%" vertical="true" horizontal="true">
+                                                <Table id="idContactTableR" alternateRowColors="true" items="{oContactModel>/}" growing="true" growingThreshold="10" mode="SingleSelectLeft" class="sapUiSizeCompact" sticky="ColumnHeaders,HeaderToolbar">
+                                                    <columns>
+                                                        <!-- <Column hAlign="Begin" width="4rem">
+                                                                    <Text text="Default" />
+                                                                </Column> -->
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="First Name" />
+                                                        </Column>
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="Middle Name" />
+                                                        </Column>
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="Last Name" />
+                                                        </Column>
+                                                        <Column hAlign="Center" width="13rem">
+                                                            <Text text="Email" />
+                                                        </Column>
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="Country Code" />
+                                                        </Column>
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="Mobile No." />
+                                                        </Column>
+                                                        <Column hAlign="Begin" width="8rem">
+                                                            <Text text="Work No." />
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem vAlign="Middle">
+                                                            <cells>
+                                                                <!-- <RadioButton enabled="false"/> -->
+                                                                <Text text="{oContactModel>firstName}" />
+                                                                <Text text="{oContactModel>middleName}" />
+                                                                <Text text="{oContactModel>lastName}" />
+                                                                <Text text="{oContactModel>Email}" />
+                                                                <Text text="{oContactModel>countryCode}" />
+                                                                <Text text="{oContactModel>Phone}" />
+                                                                <Text text="{oContactModel>wPhone}" />
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+                                            </ScrollContainer>
+                                        </VBox>
+                                    </uxap:ObjectPageSubSection>
+                                </uxap:subSections>
+                            </uxap:ObjectPageSection>
+                            <uxap:ObjectPageSection titleUppercase="false" id="section4" title="Documents">
+                                <uxap:subSections>
+                                    <uxap:ObjectPageSubSection id="section4_SS1" title="" titleUppercase="false">
+                                        <VBox justifyContent="Center" backgroundDesign="Solid" class="childVBox">
+                                            <f:SimpleForm id="idDocFormR" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="4" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="2" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" class="sapUiNoContentPadding">
+                                                <f:content>
+                                                    <Label text="Trade License" class="label"/>
+                                                    <Text text="{oDocumentModel>TradeDoc}">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M2 S2" />
+                                                        </layoutData>
+                                                    </Text>
+                                                    <Button id="tradeBtn" icon="sap-icon://attachment" width="1rem" press="_downloadAttachments">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S2" />
+                                                        </layoutData>
+                                                    </Button>
+
+                                                    <Label text="VAT Certificate" class="label"/>
+                                                    <Text text="{oDocumentModel>VatDoc}">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M2 S2" />
+                                                        </layoutData>
+                                                    </Text>
+                                                    <Button id="vatBtn" icon="sap-icon://attachment" width="1rem" press="_downloadAttachments">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S2" />
+                                                        </layoutData>
+                                                    </Button>
+
+                                                    <Label text="Emirates ID" class="label"/>
+                                                    <Text text="{oDocumentModel>EmiratesId}">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M2 S2" />
+                                                        </layoutData>
+                                                    </Text>
+                                                    <Button id="emiBtn" icon="sap-icon://attachment" width="1rem" press="_downloadAttachments">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S2" />
+                                                        </layoutData>
+                                                    </Button>
+
+                                                    <Label text="Corporate Tax Certificate" class="label"/>
+                                                    <Text text="{oDocumentModel>CorporateTax}">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M2 S2" />
+                                                        </layoutData>
+                                                    </Text>
+                                                    <Button id="taxBtn" icon="sap-icon://attachment" width="1rem" press="_downloadAttachments">
+                                                        <layoutData>
+                                                            <l:GridData span="XL2 L3 M1 S2" />
+                                                        </layoutData>
+                                                    </Button>
+                                                </f:content>
+                                            </f:SimpleForm>
+                                        </VBox>
+                                    </uxap:ObjectPageSubSection>
+                                </uxap:subSections>
+                            </uxap:ObjectPageSection>
+                        </uxap:sections>
+                    </uxap:ObjectPageLayout>
+                    <!--  -->
+                </content>
+                <footer>
+                    <Toolbar>
+                        <Button text="Back" icon="sap-icon://sys-back-2" iconFirst="true" type="Emphasized" press="onNavBacktoWizard"/>
+                        <ToolbarSpacer/>
+                        <Button text="Cancel" type="Reject" icon="sap-icon://reset" press="handleWizardCancel"/>
+                        <Button text="Save" type="Accept" icon="sap-icon://save" press="handleSaveSupplier"/>
+                        <Button text="Save &amp; Submit " type="Accept" icon="sap-icon://upload-to-cloud" press="handleSubmitFInal"/>
+                    </Toolbar>
+                </footer>
+            </Page>
+        </pages>
+    </NavContainer>
+</core:FragmentDefinition>

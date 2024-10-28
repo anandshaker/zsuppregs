@@ -1,0 +1,211 @@
+<mvc:View controllerName="zsuppregs.controller.ManageSupp"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:u="sap.ui.unified"
+    xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m">
+    <Page id="manageSuppView" class="pageBox" enableScrolling="false" showHeader="false" floatingFooter="false">
+        <content>
+            <VBox fitContainer="true" justifyContent="Start" alignContent="Stretch" alignItems="Stretch" class="childVBox" width="100%" height="100%">
+                <Toolbar class="toolBarClass" height="4.5rem" width="100%">
+                    <Avatar src="{img>/logo}" displaySize="M" showBorder="true" class="sapUiMediumMarginBegin" imageFitType="Contain"/>
+                    <ToolbarSpacer/>
+                    <!-- <core:HTML class="sapUiLargeMarginTop" content= '&lt;marquee style=&quot;color: #004ea0;font-weight: bold;font-size: larger;font-family: system-ui;&quot;&gt; Welcome to ABC Supplier Portal! &lt;/marquee&gt;'></core:HTML> -->
+                    <core:HTML class="sapUiLargeMarginTop" content='&lt;h1 style=&quot;color: #004ea0;font-weight: bold;font-size: large;font-family: system-ui;&quot;&gt;Supplier Dashboard&lt;/h1&gt;'></core:HTML>
+                    <ToolbarSpacer width="43%"/>
+                </Toolbar>
+                <VBox justifyContent="Start" alignContent="Stretch" alignItems="Stretch" fitContainer="true" width="99%" height="100%" class="rPageBox sapUiTinyMarginEnd sapUiTinyMarginBegin sapUiTinyMarginTop sapUiTinyMarginBottom">
+                    <IconTabBar id="idIconTabBar" expandable="false" expanded="true" tabDensityMode="Compact" tabsOverflowMode="StartAndEnd" enableTabReordering="true" class="sapUiResponsivePadding--header sapUiResponsivePadding">
+                        <items>
+                            <IconTabFilter text="Home" key="home" icon="sap-icon://home" design="Horizontal" iconColor="Default">
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="childVBox" visible="{=${vModel>/statusVisibility}==='Pending'? true:false}">
+                                    <HBox fitContainer="true" width="100%" alignContent="Start" justifyContent="Start" alignItems="Start">
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Manage my Application" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onManageApplication">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://write-new-document" size="1.75rem" color="#00b0ff"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Messages" wrappingType="Hyphenated"
+				                                frameType = "OneByHalf" press="onPress">
+                                            <TileContent>
+                                                <core:Icon src="sap-icon://message-popup" size="1.75rem" color="#4527a0"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                    </HBox>
+                                </VBox>
+                                <!-- visibility based on status -->
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="childVBox" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                    <HBox fitContainer="true" width="100%" alignContent="Start" justifyContent="Start" alignItems="Start">
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="New Orders"
+				                                frameType = "OneByHalf" press="onPress">
+                                            <TileContent >
+                                                <NumericContent value="1" valueColor="Critical" indicator="None" icon="sap-icon://customer-order-entry" withMargin="true" />
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="View Accepted Orders" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onPress">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://my-sales-order" size="1.75rem" color="#fb8c00"/>
+                                                <!-- <NumericContent valueColor="Good" indicator="None" icon="sap-icon://my-sales-order" withMargin="true" /> -->
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Manage Profile" wrappingType="Hyphenated"
+				                                frameType = "OneByHalf" press="onPress">
+                                            <TileContent>
+                                                <core:Icon src="sap-icon://business-card" size="1.75rem" color="#4527a0"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Update Prices" wrappingType="Hyphenated"
+				                                frameType = "OneByHalf" press="onPress">
+                                            <TileContent>
+                                                <core:Icon src="sap-icon://money-bills" size="1.75rem" color="#b71c1c"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                    </HBox>
+                                </VBox>
+                                <Toolbar class="toolBarClass sapUiSmallMarginTop" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                    <Title text="To-Do-List" class="formTitle" titleStyle="H4" level="H4"/>
+                                </Toolbar>
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="sapUiTinyMarginTop childVBox" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                    <HBox fitContainer="true" width="100%" alignContent="Start" justifyContent="Start" alignItems="Start">
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Confirm Purchase Orders" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onPress">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://sales-order-item" size="1.75rem" color="#ffea00"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Overview" wrappingType="Hyphenated"
+				                                frameType = "OneByHalf" press="onPress">
+                                            <TileContent>
+                                                <core:Icon src="sap-icon://customer-view" size="1.75rem" color="#4527a0"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Dis-Continue Products" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onPress">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://product" size="1.75rem" color="#00c853"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                    </HBox>
+                                </VBox>
+                                <Toolbar class="toolBarClass sapUiSmallMarginTop" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                    <Title text="Insights" class="formTitle" titleStyle="H4" level="H4"/>
+                                </Toolbar>
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="sapUiTinyMarginTop childVBox" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                    <HBox fitContainer="true" width="100%" alignContent="Start" justifyContent="Start" alignItems="Start">
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Pending Registration Applications" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onPress">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://pending" size="1.75rem" color="#00b0ff"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                        <GenericTile class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiSmallMarginBegin tileLayout" header="Month-Wise New Orders" wrappingType="Hyphenated"
+				                                frameType = "TwoByHalf" press="onPress">
+                                            <TileContent >
+                                                <core:Icon src="sap-icon://bar-chart" size="1.75rem" color="#ff1744"/>
+                                            </TileContent>
+                                        </GenericTile>
+                                    </HBox>
+                                </VBox>
+                            </IconTabFilter>
+                            <IconTabFilter text="Purchase Management" key="purManage" icon="sap-icon://wallet" iconColor="Positive" design="Horizontal" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="childVBox">
+
+                                </VBox>
+                            </IconTabFilter>
+                            <IconTabFilter text="Price Management" key="priceManage" icon="sap-icon://expense-report" design="Horizontal" iconColor="Critical" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                <VBox justifyContent="Start" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start">
+                                    <HBox justifyContent="Start" fitContainer="true" width="100%" alignContent="Stretch" alignItems="Stretch" class="childVBox sapUiTinyMarginBottom">
+                                        <VBox justifyContent="Start" height="auto" class="sapUiSmallMarginTopBottom sapUiLargeMarginBegin sapUiMediumMarginEnd">
+                                            <Label text="Material:" class="label" design="Bold"/>
+                                            <Input/>
+                                        </VBox>
+                                        <VBox justifyContent="Start" height="auto" class="sapUiSmallMarginTopBottom sapUiMediumMarginBeginEnd">
+                                            <Label text="Category:" class="label" design="Bold"/>
+                                            <Input/>
+                                        </VBox>
+                                        <VBox justifyContent="Start" height="auto" class="sapUiSmallMarginTopBottom sapUiMediumMarginBeginEnd">
+                                            <Label text="Material Description:" design="Bold" class="label"/>
+                                            <Input/>
+                                        </VBox>
+                                        <VBox justifyContent="End" height="auto" class="sapUiSmallMarginTopBottom sapUiMediumMarginBeginEnd">
+                                            <Button type="Emphasized" text="Go" width="6rem"/>
+                                        </VBox>
+                                    </HBox>
+                                    <ScrollContainer height="100%" vertical="true" horizontal="true">
+                                        <Table id="idPriceTable" alternateRowColors="true" growing="true" growingThreshold="10" items="{oPriceModel>/}" mode="SingleSelectLeft" class="sapUiSizeCompact" sticky="ColumnHeaders,HeaderToolbar">
+                                            <headerToolbar>
+                                                <OverflowToolbar>
+                                                    <Title text="Price Table" class="formTitle" titleStyle="H4" level="H4"/>
+                                                    <ToolbarSpacer/>
+                                                    <Button text="Download Template" press="_downloadPriceTemplate" type="Unstyled" icon="sap-icon://download-from-cloud"/>
+                                                    <!-- <Button text="Create new Prices Bulk" type="Emphasized" icon="sap-icon://upload-to-cloud"/> -->
+                                                    <u:FileUploader id="priceUploader" name="myFileUpload" style="Emphasized" buttonText="Create new Prices Bulk" icon="sap-icon://upload-to-cloud" fileType="xlsx" uploadOnChange="false" buttonOnly="true" typeMissmatch="handleTypeMissmatch" change="onUploadExcelData" />
+                                                    <Button text="Create new Price" type="Success" icon="sap-icon://sys-add" press="onAddPrice"/>
+                                                    <Button text="Delete" type="Negative" icon="sap-icon://delete" press="onDeletePrice"/>
+                                                </OverflowToolbar>
+                                            </headerToolbar>
+                                            <columns>
+                                                <Column hAlign="Begin" width="5rem">
+                                                    <Label class="label" design="Bold" text="Sl. No" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Label class="label" design="Bold" text="Product Code" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="12rem">
+                                                    <Label class="label" design="Bold" text="Product Description" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="10rem">
+                                                    <Label class="label" design="Bold" text="Current Price" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="6rem">
+                                                    <Label class="label" design="Bold" text="Currency" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="10rem">
+                                                    <Label class="label" design="Bold" text="Unit of Measure" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Label class="label" design="Bold" text="Valid From" />
+                                                </Column>
+                                                <Column hAlign="Begin" width="8rem">
+                                                    <Label class="label" design="Bold" text="Valid To" />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem vAlign="Middle">
+                                                    <cells>
+                                                        <Input value="{oPriceModel>srNo}"/>
+                                                        <Input value="{oPriceModel>prdCode}"/>
+                                                        <Input value="{oPriceModel>prdDesc}" />
+                                                        <Input value="{oPriceModel>currPrice}" />
+                                                        <Input value="{oPriceModel>currency}"/>
+                                                        <Input value="{oPriceModel>uom}" />
+                                                        <DatePicker value="{'path': 'oPriceModel>fromDate','type': 'sap.ui.model.type.Date','formatOptions': {'pattern': 'dd/MM/yyyy'}}"/>
+                                                        <DatePicker value="{'path': 'oPriceModel>toDate','type': 'sap.ui.model.type.Date','formatOptions': {'pattern': 'dd/MM/yyyy'}}"/>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </ScrollContainer>
+
+                                </VBox>
+                            </IconTabFilter>
+                            <IconTabFilter text="Analytics" key="analytics" design="Horizontal" icon="sap-icon://business-objects-experience" iconColor="Negative" visible="{=${vModel>/statusVisibility}==='Approved'? true:false}">
+                                <VBox justifyContent="Start" backgroundDesign="Solid" fitContainer="true" width="100%" height="100%" alignContent="Start" alignItems="Start" class="childVBox">
+
+                                </VBox>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </VBox>
+            </VBox>
+        </content>
+        <footer>
+            <Toolbar class="toolBarClass">
+                <Button icon="sap-icon://information" type="Emphasized"/>
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

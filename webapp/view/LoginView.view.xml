@@ -1,0 +1,52 @@
+<mvc:View controllerName="zsuppregs.controller.LoginView"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m">
+    <Page id="loginView" class="pageBox" enableScrolling="false" showHeader="false" floatingFooter="false">
+        <content>
+            <VBox fitContainer="true" justifyContent="Start" alignContent="Stretch" alignItems="Stretch" class="childVBox" width="100%" height="100%">
+                <Toolbar class="toolBarClass" height="4.5rem" width="100%">
+                    <Avatar src="{img>/logo}" displaySize="M"	showBorder="true"  class="sapUiMediumMarginBegin" imageFitType="Contain"/>
+                    <ToolbarSpacer/>
+                    <core:HTML class="sapUiLargeMarginTop" content= '&lt;marquee style=&quot;color: #004ea0;font-weight: bold;font-size: larger;font-family: system-ui;&quot;&gt; Welcome to ABC Supplier Portal! &lt;/marquee&gt;'></core:HTML>
+                    <ToolbarSpacer width="43%"/>
+                </Toolbar>
+                <VBox justifyContent="Center" fitContainer="true" width="99%" height="100%" alignContent="Center" alignItems="Center" class="rPageBox sapUiTinyMarginEnd sapUiTinyMarginBegin sapUiTinyMarginTop sapUiTinyMarginBottom">
+                    <VBox alignContent="Center" justifyContent="Start" alignItems="Center" height="80%" width="22%" class="vPageBox sapUiSmallMarginTop">
+                        <!-- <Title text="Existing Supplier Login" textAlign="Center" level="H3" titleStyle="H3" class="formTitle sapUiMediumMarginTop sapUiSmallMarginBottom"/> -->
+                        <core:HTML content='&lt;div style=&quot;color: #004ea0;font-weight: bold;font-size: large;font-family: system-ui;&quot;&gt;&lt;h4 class=&quot;titleClass sapUiMediumMarginTop&quot;&gt;Existing Supplier Login&lt;/h4&gt;&lt;/div&gt;'></core:HTML>
+                        <VBox class="formBox sapUiSmallMarginTop sapUiSmallMarginBottom" backgroundDesign="Solid">
+                            <VBox class="sapUiTinyMargin">
+                                <Label text="Email Address" />
+                                <Input id="eMail" type="Email" width="15em" liveChange="onEmailLiveChange"/>
+                            </VBox>
+                        </VBox>
+                        <VBox backgroundDesign="Solid" class="formBox">
+                            <VBox class="sapUiTinyMargin">
+                                <Label text="Password" />
+                                <Input id="passwrd" type="Password" width="15em" showClearIcon="true"/>
+                            </VBox>
+                        </VBox>
+                        <VBox class="sapUiTinyMarginTop" alignContent="Center" justifyContent="Center" alignItems="Center">
+                            <Button text="Login" type="Emphasized" icon="sap-icon://arrow-right" iconFirst="false" width="15.5rem" press="openSuppDashboard" class="loginBTn" />
+                        </VBox>
+                        <VBox justifyContent="End" alignItems="End" alignContent="End" width="100%" class="sapUiTinyMarginTop sapUiLargeMarginBottom">
+                            <Link text="Forgot Password?" press="handleForgotPassword" class="primary sapUiLargeMarginEnd"/>
+                        </VBox>
+
+                        <VBox justifyContent="Center" alignItems="Center" alignContent="Center" width="100%" class="sapUiMediumMarginBottom">
+                            <Link text="Not a Supplier? Sign Up!" press="handleSignUpPress" class="primary" />
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </content>
+        <footer>
+            <Toolbar class="toolBarClass">
+                <Button icon="sap-icon://information" type="Emphasized"/>
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>
